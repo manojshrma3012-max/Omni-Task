@@ -3,7 +3,7 @@ import oauth2client from '../config/googleauth.js'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import User from '../models/users.models.js';
-import type { userpayload } from '../middlewares/auth.middleware.js'
+import type { AuthenticatedRequest, userpayload } from '../middlewares/auth.middleware.js'
 
 export const Login = TryCatch(async(req,res)=>{
     const {code} = req.body;
@@ -28,13 +28,28 @@ export const Login = TryCatch(async(req,res)=>{
         }
         const tokendata:userpayload = {_id:user._id.toString(),name:user.name,email:user.email,image:user.image}
          const token = jwt.sign(tokendata,process.env.SECRET as string,{
-            expiresIn:'15d'
+            expiresIn:'7d'
         })
 
-        res.status(200).json({
-            message: "Login successful",
-            token,
-            user: tokendata
+      res.status(isNewUser ? 201 : 200).json({
+            message: isNewUser ? "User Created" : "Login Successful",
+            token:token,
+            user
         })
+        return
 
+})
+
+export const getme = TryCatch(async(req:AuthenticatedRequest,res)=>{
+    const user = req.user
+    if(!user){
+        res.status(401).json({
+            message:"Unauthorized"
+        })
+        return
+    }
+    res.status(200).json({
+        message:"User Info",
+        user
+    })
 })
