@@ -7,7 +7,6 @@ export type userpayload = {
     email: string;
     image: string;
 }
-
 export interface AuthenticatedRequest extends Request {
     user?: userpayload | null;
 }

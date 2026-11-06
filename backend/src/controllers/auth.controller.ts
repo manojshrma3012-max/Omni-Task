@@ -1,7 +1,9 @@
 import TryCatch from '../middlewares/TryCatch.js'
 import oauth2client from '../config/googleauth.js'
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
 import User from '../models/users.models.js';
+import type { userpayload } from '../middlewares/auth.middleware.js'
 
 export const Login = TryCatch(async(req,res)=>{
     const {code} = req.body;
@@ -24,7 +26,15 @@ export const Login = TryCatch(async(req,res)=>{
                 image:picture,
             })
         }
-        
+        const tokendata:userpayload = {_id:user._id.toString(),name:user.name,email:user.email,image:user.image}
+         const token = jwt.sign(tokendata,process.env.SECRET as string,{
+            expiresIn:'15d'
+        })
 
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user: tokendata
+        })
 
-}
+})
