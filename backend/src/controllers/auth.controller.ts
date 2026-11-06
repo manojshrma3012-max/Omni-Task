@@ -39,7 +39,6 @@ export const Login = TryCatch(async(req,res)=>{
         return
 
 })
-
 export const getme = TryCatch(async(req:AuthenticatedRequest,res)=>{
     const user = req.user
     if(!user){
