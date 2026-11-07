@@ -4,6 +4,7 @@ import { FaGoogle } from "react-icons/fa";
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { serviceurl } from "@/main"
 import { useGoogleLogin} from '@react-oauth/google'
 
 import { Button } from "@/components/ui/button";
@@ -18,14 +19,47 @@ import {
   Field,
   FieldGroup,
 } from "@/components/ui/field";
+import { useUserStore } from "@/store/userstore";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const setUser = useUserStore((state) => state.setUser)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const googleres = 
+  const googleres = async (authresult: any) => {
+    console.log("Google success:", authresult);
+
+    setLoading(true);
+
+    try {
+        console.log("Sending code to backend:", authresult.code);
+        const res = await axios.post(
+            `${serviceurl}/api/auth/login`,
+            {
+                code: authresult.code
+            }
+        );
+        setUser(res.data.user);
+      } catch (error) {
+        console.error("Error during login:", error);
+      } finally {
+        setLoading(false);
+      }
+  }
+
+  const login = useGoogleLogin({
+    onSuccess: googleres,
+     onError: (error) => {
+        console.error("Google OAuth error:", error);
+       console.log("Google OAuth error details:", error);
+        setLoading(false);
+    },
+    flow: 'auth-code',
+  });
+
+      
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="border border-slate-800/80 bg-slate-900/80 shadow-xl shadow-black/20 backdrop-blur-xl">
@@ -44,6 +78,11 @@ export function LoginForm({
             <FieldGroup>
               <Field>
                 <Button
+                  onClick={() => {
+                    setLoading(true);
+                    login();
+                  }}
+                  disabled={loading}
                   variant="outline"
                   type="button"
                   className="
