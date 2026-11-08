@@ -41,6 +41,7 @@ export const Login = TryCatch(async(req,res)=>{
 })
 export const getme = TryCatch(async(req:AuthenticatedRequest,res)=>{
     const user = req.user
+    console.log("Authenticated user:", user);
     if(!user){
         res.status(401).json({
             message:"Unauthorized"
