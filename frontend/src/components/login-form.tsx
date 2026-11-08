@@ -42,13 +42,14 @@ export function LoginForm({
             }
         );
         setUser(res.data.user);
+        localStorage.setItem("token", res.data.token);
+        navigate('/')
       } catch (error) {
         console.error("Error during login:", error);
       } finally {
         setLoading(false);
       }
   }
-
   const login = useGoogleLogin({
     onSuccess: googleres,
      onError: (error) => {

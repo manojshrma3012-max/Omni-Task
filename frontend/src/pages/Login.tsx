@@ -1,8 +1,11 @@
 
 import { LoginForm } from "@/components/login-form";
+import { useUserStore } from "@/store/userstore";
 import { Workflow } from "lucide-react";
 
 const Login = () => {
+  const user = useUserStore((state) => state.user);
+  console.log(user);
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#080B16] px-4">
 
