@@ -23,6 +23,12 @@ const Home = () => {
     .map((part) => part[0] ?? "")
     .join("")
     .toUpperCase();
+    const handleLogout = () => {
+      // Clear user data from the store
+      useUserStore.setState({ user: null });
+      localStorage.removeItem("token");
+      navigate("/login");
+    };
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[#080B16] text-white">
@@ -46,6 +52,7 @@ const Home = () => {
             </span>
           </Link>
           {/* Profile Dropdown */}
+        <div className="flex items-center gap-3">
           <DropdownMenu>
            <DropdownMenuTrigger
                      render={
@@ -99,7 +106,7 @@ const Home = () => {
           </DropdownMenu>
           <DropdownMenu>
           <DropdownMenuTrigger
-  render={
+                    render={
     <Button
       variant="ghost"
       className="grid size-10 place-items-center rounded-full p-0 hover:bg-slate-800/70"
@@ -116,48 +123,36 @@ const Home = () => {
         </span>
       )}
     </Button>
-  }
-/>
+                    }
+            />
 
             {/* Dropdown Content */}
             <DropdownMenuContent
               align="end"
               sideOffset={10}
-              className="w-56 rounded-2xl border border-white/[0.06] bg-[#111111] p-2 text-gray-300 shadow-2xl shadow-black/40"
+              className="w-64 rounded-2xl border border-white/[0.06] bg-[#111111] p-2 text-gray-300 shadow-2xl shadow-black/40"
             >
-              {/* Account Section */}
-              <DropdownMenuItem
-                render={<Link to="/agents" />}
-                className="cursor-pointer rounded-md px-2 py-2 text-sm text-gray-300 focus:bg-white/[0.06] focus:text-white"
-              >
-                <Bot size={16} />
-                My agents
-              </DropdownMenuItem>
-
-              
-
-
+              <div className="flex items-center gap-3 px-3 py-3">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{user?.name || "user"}</p>
+                  <p className="truncate text-xs text-zinc-500">{user?.email || "email"}</p>
+                </div>
+                
+              </div>
               <DropdownMenuSeparator className="my-1 bg-white/[0.12]" />
+          
               <DropdownMenuItem
-                render={<Link to="/agent/new" />}
-                className="cursor-pointer rounded-md px-2 py-2 text-sm text-gray-300 focus:bg-white/[0.06] focus:text-white"
+                className="cursor-pointer rounded-md px-2 py-2 text-sm text-red-400 focus:bg-red-500/10 focus:text-red-400"
               >
-                <Plus size={16} />
-                Create New Agent
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="my-1 bg-white/[0.12]" />
-              <DropdownMenuItem
-                render={<Link to="/integration" />}
-                className="cursor-pointer rounded-md px-2 py-2 text-sm text-gray-300 focus:bg-white/[0.06] focus:text-white"
-              >
-                <Settings2 size={16} />
-                Integration
+                <LogOut size={16} />
+                Logout
               </DropdownMenuItem>
 
               {/* Team Section */}
               
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
         </header>
 
         {/* Main Content */}
