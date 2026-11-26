@@ -1,5 +1,6 @@
 import TryCatch from "../middlewares/TryCatch.js";
 import Agent from "../models/agent.model.js";
+import type { AuthenticatedRequest, userpayload } from '../middlewares/auth.middleware.js'
 
 
 export const createAgent = TryCatch(async(req,res)=>{
@@ -20,5 +21,20 @@ export const createAgent = TryCatch(async(req,res)=>{
     res.status(201).json({
         message:"Agent created successfully",
         agent
+    })
+})
+
+export const getAgents = TryCatch(async(req:AuthenticatedRequest,res)=>{
+    const user = req.user?._id
+    if(!user){
+        res.status(401).json({
+            message:"Unauthorized"
+        })
+        return
+    }
+    const agents = await Agent.find({ userid: user }).populate('userid','name email image');
+    console.log("Fetched agents:", agents); 
+    res.status(200).json({
+        agents
     })
 })
