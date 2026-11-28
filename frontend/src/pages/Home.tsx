@@ -79,10 +79,6 @@ const Home = () => {
                 <Bot size={16} />
                 My agents
               </DropdownMenuItem>
-
-              
-
-
               <DropdownMenuSeparator className="my-1 bg-white/[0.12]" />
               <DropdownMenuItem
                 render={<Link to="/agent/new" />}
@@ -142,6 +138,7 @@ const Home = () => {
               <DropdownMenuSeparator className="my-1 bg-white/[0.12]" />
           
               <DropdownMenuItem
+              onClick={handleLogout}
                 className="cursor-pointer rounded-md px-2 py-2 text-sm text-red-400 focus:bg-red-500/10 focus:text-red-400"
               >
                 <LogOut size={16} />

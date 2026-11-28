@@ -6,6 +6,9 @@ import { serviceurl } from "./main";
 import axios from "axios";
 import { useUserStore } from "./store/userstore";
 import Home from "./pages/Home";
+import Agents from "./pages/Agents";
+import Integrations from "./pages/Integrations";
+import CreateAgents from "./pages/CreateAgents";
 
 function App() {
   const setUser = useUserStore((state) => state.setUser);
@@ -31,6 +34,9 @@ function App() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/agents" element={user ? <Agents /> : <Navigate to="/login" />} />
+        <Route path="/integration" element={user ? <Integrations /> : <Navigate to="/login" />} />
+        <Route path="/agent/new" element={user ? <CreateAgents /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
     </>
