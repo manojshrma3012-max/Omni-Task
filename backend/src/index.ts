@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/agents', (await import('./routes/agents.routes.js')).default);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
